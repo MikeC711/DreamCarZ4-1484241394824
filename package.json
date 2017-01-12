@@ -16,7 +16,8 @@
     "errorhandler": "1.4.x",
     "connect-multiparty": "2.0.x",
     "compression": "^1.6.2",
-    "cookie-parser": "^1.4.3"
+    "cookie-parser": "^1.4.3",
+    "express-force-ssl": "^0.3.2"
   },
   "keywords": [
     "DreamCarZ",
