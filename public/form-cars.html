@@ -1,0 +1,38 @@
+<!-- form-cars.html -->
+<h2>Now let's choose the perfect car for you</h2>
+<h3>Based on your finances, preferences, et al, here is what we've picked for you</h3>
+<div class="row">
+  <div class="col-xs-12">
+      <a href="/#/form/testDrive?{{carData.recommendList[0].vin}}">
+        <img ng-src="{{carData.recommendList[0].url}}" alt="{{carData.recommendList[0].model}}" style="width:100%" ng-click="getVinInfo(1, 0)">
+        <div class="caption">
+          <p>{{carData.recommendList[0].model}} - {{carData.recommendList[0].price}}</p>
+        </div>
+      </a>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-4" ng-repeat="car in carData.qRow1">
+    <div class="thumbnail">
+      <a href="/#/form/testDrive?{{car.vin}}">
+        <img ng-src="{{car.url}}" alt="{{car.model}}" style="width:100%" ng-click="getVinInfo(0, $index)">
+        <div class="caption">
+          <p>{{car.model}} - {{car.price}}</p>
+        </div>
+      </a>
+    </div>
+  </div>
+</div>
+Something between rows
+<div class="row">
+  <div class="col-md-4" ng-repeat="car2 in carData.qRow2">
+    <div class="thumbnail">
+      <a href="/#/form/testDrive?{{car.vin}}">
+        <img src="{{car2.url}}" alt="{{car2.model}}" style="width:100%" ng-click="getVinInfo(0, ($index+3))">
+        <div class="caption">
+          <p>{{car2.model}} - {{car2.price}}</p>
+        </div>
+      </a>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,32 @@
+<!-- form-getInsurance.html -->
+<div class="container">
+<h2>And Finally, let's make sure this dream has protection</h2>
+  <md-content style="margin: 16px; padding:16px">
+    <h3> Insurance Sliders </h3>
+    <div layout>
+      <div flex="10" layout layout-align="center center"> <span class="md-body-1">Deductible</span> </div>
+      <md-slider flex md-discrete min="500" max="5000" round="0" ng-model="insuranceData.deductible"
+           ng-change="echoSliderDeductible()" aria-label="red" step="250" id="insuranceDeductibleSlider" class> </md-slider>
+        <div flex="20" layout layout-align="center center"> <input type="number" ng-model="insuranceData.deductible" aria-label="red" ng-change="echoSliderDeductible()"
+           aria-controls="insuranceDeductibleSlider"> </div>
+      </div>
+    <div row>
+      <div layout>
+        <div flex="10" layout layout-align="center center"> <span class="md-body-1">Liability max coverage</span> </div>
+      <md-slider flex md-discrete ng-model="insuranceData.maxLiability" min="100000" max="1000000" step="50000"
+           aria-label="green" id="insuranceLiabilitySlider" class="md-accent" ng-change="echoSliderLiability()" round="0"> </md-slider>
+      <div flex="20" layout layout-align="center center"> <input type="number" ng-model="insuranceData.maxLiability" aria-label="green"
+           aria-controls="insuranceLiabilitySlider" ng-change="echoSliderLiability()"> </div>
+      </div>
+    </div>
+  </md-content>
+  <h2> Quotes from premier insurance providers</h2>
+<div class="row">
+  <form name="insuranceForm">
+    <h3>Choose from our premier Insurerers</h3>
+      <div class="row" ng-repeat="quote in insuranceData.quotes">
+        <a ui-sref="form.reviewProcess" class="btn btn-block btn-info tHi" ng-click="saveInsurance($index)">{{quote.company}}   {{quote.payment}} p.a.<span class="glyphicon glyphicon-circle-arrow-right pull-right" style="padding-right:5px;padding-top:2px;"></span>
+      </div>
+  </form>
+</div>
+</div>

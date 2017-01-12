@@ -1,0 +1,31 @@
+<!-- form-getLoan.html -->
+<div class="container">
+<h2>Almost there, let's check into financing</h2>
+  <md-content style="margin: 16px; padding:16px">
+    <h3> Loan Sliders </h3>
+    <div layout>
+      <div flex="10" layout layout-align="center center"> <span class="md-body-1">Down Payment</span> </div>
+      <md-slider flex md-discrete min="{{loanData.loanTerms.minDownPmt}}" max="{{carData.curCar.price}}" round="2" ng-model="loanData.loanTerms.downPmt"
+           ng-change="echoSliderDollar()" aria-label="red" step="{{loanData.loanTerms.minDownPmt}}" id="loanDollarSlider" class> </md-slider>
+      <div flex="20" layout layout-align="center center"> <input type="number" ng-model="loanData.loanTerms.downPmt" aria-label="red" ng-change="echoSliderDollar()"
+           aria-controls="loanDollarSlider"> </div>
+    </div>
+    <div layout>
+      <div flex="10" layout layout-align="center center"> <span class="md-body-1">Term of Loan</span> </div>
+      <md-slider flex md-discrete ng-model="loanData.loanTerms.loanTerm" min="{{loanData.loanTerms.minTerm}}" max="{{loanData.loanTerms.maxTerm}}" step="0.5"
+           aria-label="green" id="loanTermSlider" class="md-accent" ng-change="echoSliderTerm()" round="1"> </md-slider>
+      <div flex="20" layout layout-align="center center"> <input type="number" ng-model="loanData.loanTerms.loanTerm" aria-label="green"
+           aria-controls="loanTermSlider" ng-change="echoSliderTerm()"> </div>
+    </div>
+  </md-content>
+  <h2> Quotes from top lenders </h2>
+<div class="row">
+  <form name="loanForm">
+    <h3>Choose from our premier lenders</h3>
+      <div class="row" ng-repeat="quote in loanData.quotes">
+        <a ui-sref="form.getInsurance" class="btn btn-block btn-info tHi" ng-click="saveLoan($index)">{{quote.company}}   {{quote.interest}} p.a.   {{quote.payment}} per month <span class="glyphicon glyphicon-circle-arrow-right pull-right" style="padding-right:5px;padding-top:2px;"></span> 
+        <!-- <button class="tHi" ngHover style="background : yellow;width:80%"><font color="blue">{{quote.company}}   {{quote.interest}} p.a.   {{quote.payment}} per month </font> </button> -->
+      </div>
+  </form>
+</div>
+</div>

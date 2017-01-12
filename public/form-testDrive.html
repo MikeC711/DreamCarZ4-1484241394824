@@ -1,0 +1,38 @@
+<!-- form-testDrive.html -->
+<div class="container">
+<div class="col-xs-8">
+<h3>Let's take it for a spin</h3>
+  <h3> Now let's schedule a test drive at {{carData.curDealer.name}} </h3>
+  <form name="myForm">
+    <h3>Select preferred time for a test drive:</h3>
+    <hr/>
+    <div ng-repeat="tdDate in carData.testDriveTimes" class="lead">Test Drives on {{tdDate.tdDate}}
+   
+    
+      <div class="list-group" style="padding-top:10px;">
+       <div class="col-xs-6" ng-repeat="tdTime in tdDate.tdTimes">
+        <button class="btn btn-success list-group-item" style="width:300px;"  ng-click="showTestDrive(tdDate.tdDate,tdTime.startTime);" flex ngHover>
+          <h4 class="list-group-item-heading" style="color:white;">Test drive at : {{tdTime.startTime}}</h4>
+        </button>
+      </div>
+</div>
+    </div>
+
+</form>
+</div>
+ <div class="col-xs-4">
+      <img class="img-responsive" src="{{carData.curCar.url}}" alt="{{carData.curCar.model}}">
+      <div class="caption">
+        <p>{{carData.curCar.model}} - {{carData.curCar.price}}</p>
+      </div>
+ <p class="list-group-item-text" style="color:white;font-size:18px; padding-bottom:20px;">Your drive time is on <span style="color:orange;" ng-bind="date"></span> from <span style="color:orange;" ng-bind="time"></span></p>
+    <a ui-sref="form.getLoan" class="btn btn-block btn-info">
+    Schedule the test drive<span class="glyphicon glyphicon-circle-arrow-right pull-right" style="padding-right:5px;padding-top:2px;"></span>
+    </a>
+</div>
+</div>
+
+</div>
+
+ 
+

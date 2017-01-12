@@ -1,0 +1,22 @@
+<!-- form-loginScreen.html -->
+<div class="row">
+    <div class="col-xs-12"> <h2>Nimbus Bank Login</h2> </div>
+</div>
+<div class="form-group">
+    <label for="UserName">Userid</label>
+    <input type="text" class="form-control" name="username" ng-change="userLogin()" ng-model="userInfo.username"
+        ng-model-options="{ updateOn: 'blur' }" placeholder="username">
+</div>
+<div class="form-group">
+    <label for="password">Password/PIN</label>
+    <input type="password" class="form-control" name="password" ng-model="formData.password" placeholder="password">
+</div>
+<div class="form-group row">
+    <br>
+<div class="col-xs-6 col-xs-offset-3">
+    <a ui-sref="form.nextBestAction" class="btn btn-block btn-info">
+    Login to Nimbus Online Banking <span class="glyphicon glyphicon-circle-arrow-right"></span>
+    </a>
+</div>
+</div>
+

@@ -1,6 +1,7 @@
-# Node.js Cloudant Starter Overview
+# DreamCarZ with Angular GUI and BreadCrumbs widget
 
-The Node.js Cloudant Starter demonstrates how to use the Bluemix Cloudant NoSQL DB service. The app displays persisted files and lets the user upload new files or delete old files.
+DreamCarZ is a demo platform with which we highlight the great technology which enables Z systems to be seamlessly integrated into
+hybrid cloud solutions (including mobile).  
 
 ## Decomposition Instructions
 
