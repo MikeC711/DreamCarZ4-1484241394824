@@ -1,6 +1,7 @@
 {
-  "name": "cloudant_boilerplate_nodejs",
-  "version": "0.0.2",
+  "name": "DreamCarZ.Angular",
+  "version": "1.0.0",
+  "description": "DreamCarZ with a simple Angular client leveraging bootstrap css",
   "private": true,
   "scripts": {
     "start": "node app.js"
@@ -14,7 +15,18 @@
     "morgan": "1.6.x",
     "errorhandler": "1.4.x",
     "connect-multiparty": "2.0.x"
+    "compression": "^1.6.2",
+    "cookie-parser": "^1.4.3"
   },
+  "keywords": [
+    "DreamCarZ",
+    "hybrid",
+    "cloud",
+    "z",
+    "systems",
+    "demo",
+    "watson"
+  ],
   "repository": {},
   "engines": {
   	"node": "4.x"
