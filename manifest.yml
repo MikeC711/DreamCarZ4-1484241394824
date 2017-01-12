@@ -1,0 +1,11 @@
+applications:
+- path: .
+  memory: 512M
+  instances: 1
+  domain: mybluemix.net
+  name: DreamCarZ4
+  host: DreamCarZ4
+  disk_quota: 1024M
+  services:
+  - DreamCarZ-cloudantNoSQLDB
+  - Personality Insights-26
