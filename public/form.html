@@ -1,7 +1,8 @@
+    <div class="container">
 <!-- form.html -->
 <div class="row">
-<!-- <div class="col-sm-8 col-sm-offset-2"> -->
-  <div class="col-xs-20">
+
+  <div class="col-xs-12">
 
     <div id="form-container">
 
@@ -22,19 +23,9 @@
                 <a ui-sref-active="active" ui-sref=".congratsScreen"><span>8</span> Congratulations</a>
             </div> -->
             <!-- TODO: Collapse whole thing, format display of actions a bit -->
-            <div><input ng-model="showBreadCrumbs" type="checkbox">Show BreadCrumbs</div>
-            <div class="roundedborder col-xs-6 col-xs-offset-6">
-                <div class="row" ng-show="showBreadCrumbs" ng-repeat="component in breadCrumbs">
-                    <div class="btn btn-block btn-info"> {{component.descrip}}  Count: {{component.count}} <span class="glyphicon glyphicon-expand" 
-                        ng-click="component.gExpand = !component.gExpand" style="padding-right:5px;padding-top:2px;"></span>
-                        <div class="row" ng-show="component.gExpand" ng-repeat="gAction in component.actionArr.slice().reverse()">
-                            <div layout layout-align="left left">{{gAction}} </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+              
         </div>
-        
+       
         <!-- use ng-submit to catch the form submission and use our Angular function -->
         <form id="signup-form" ng-submit="processForm()">
 
@@ -44,13 +35,75 @@
 
     </div>
 
-    <!-- show the reason we are where we are -->
-    <pre>
-        <!-- {{ explainData }} -->
-        {{llSteps}}
-    </pre>
-
-
+    
   </div>
 </div>
+</div>
+
+
+
+
+
+
+<div class="container">
+    <div class="row breadcrumb-window col-xs-6 col-md-4" id="breadcrumb" style="margin-left:10px;">
+        <div class="col-xs-12 col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading top-bar " style="background-color:#1a56a2;">
+                    <div class="col-md-8 col-xs-8">
+                        <h3 class="panel-title"><span class="glyphicon glyphicon-question-sign"></span> How this works</h3>
+                    </div>
+                    <div class="col-md-4 col-xs-4" style="text-align: right;">
+                     <span id="minim_breadcrumb_window" class="glyphicon glyphicon-plus icon_minim panel-collapsed" style="cursor: pointer"></span>
+                       
+                    </div>
+                </div>
+
+<div class="panel-body panel-collapsed collapse msg_container_base" style="padding-top:10px;"> 
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+  
+  <div class="panel panel-default" ng-repeat="component in breadCrumbs">
+    <div class="panel-heading" style="background-color:#1a56a2;" role="tab" id="heading{{breadCrumbs.length - $index - 1}}">
+      <h4 class="panel-title" >
+        <a href="javascript:;" class="btn-block" role="button" data-toggle="collapse" data-parent="heading{{breadCrumbs.length - $index - 1}}" data-target="#collapse{{breadCrumbs.length - $index - 1}}" aria-expanded="false" aria-controls="collapse{{breadCrumbs.length - $index - 1}}">
+          {{component.descrip}} <span class="badge" style="background-color: #2383C4; float:right;">{{component.count}}</span>
+        </a>
+      </h4>
+    </div>
+    <div id="collapse{{breadCrumbs.length - $index - 1}}" class="panel-collapse collapse panel-collapsed" role="tabpanel" aria-labelledby="heading{{breadCrumbs.length - $index - 1}}" style="padding-top:5px;">
+      <div class="list-group" ng-repeat="gAction in component.actionArr.slice().reverse()">
+       {{gAction}}
+       <hr ng-If="breadCrumbs.length > $index" />
+      </div>
+    </div>
+  </div>
+
+
+</div>
+</div>
+          </div>
+                </div>
+              
+        </div>
+        </div>
+ 
+
+
+<script>
+$(document).on('click', '.panel-heading span.icon_minim', function (e) {
+    var $this = $(this);
+
+    if (!$this.hasClass('panel-collapsed')) {
+        $this.parents('.panel').find('.panel-body').slideUp();
+        $this.addClass('panel-collapsed');
+        $this.removeClass('glyphicon-minus').addClass('glyphicon-plus');
+    } else {
+        $this.parents('.panel').find('.panel-body').slideDown();
+         $('.panel-collapse.in').collapse('hide');
+        $this.removeClass('panel-collapsed');
+        $this.removeClass('glyphicon-plus').addClass('glyphicon-minus');
+    }
+});
+</script>
+
 

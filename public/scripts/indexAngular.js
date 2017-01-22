@@ -4,6 +4,7 @@
 var REST_DCDATA = '/api/dreamCarZ';
 const mthArr = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ] ;
 
+
 // TODO: Consider https and need for a trustStore for self-signed cert
 // TODO: For now, client functions containable in here, future is to find out how to expand out of here and still have Angular environment/features
 // TODO: Look at minifying for production
@@ -111,6 +112,9 @@ app.config(function($stateProvider, $urlRouterProvider) {
 app.controller('formController', ['$scope', '$log', '$http', 'GeolocationService', function($scope, $log, $http, geolocation) {
 
     // TODO: Look at removing explainData in favor of actionArr
+
+
+   
 
     $scope.getEl = function(key) {
         for (var j = 0; j < $scope.breadCrumbs.length; j++) {
@@ -307,6 +311,7 @@ $scope.time = '...';
 // =========================================================================================================================================================
 // Get loan quotes now that key info is known
 // =========================================================================================================================================================
+
     $scope.getLoanQuotes = function() {
         $http.get(REST_DCDATA+ '/loanQuotes?totalCost='+$scope.carData.curCar.price+"&downPayment="+$scope.loanData.loanTerms.downPmt+"&loanTerm="+$scope.loanData.loanTerms.loanTerm)
             .success(function(result) {
@@ -357,7 +362,10 @@ $scope.time = '...';
             })
 
     } ;
-
+     //Set insurance default deductible
+    $scope.insuranceData.deductible = 500;
+    //Set insurance default max liability
+    $scope.insuranceData.maxLiability = 100000;
     $scope.saveInsurance= function(insuranceIdx) {
         $scope.insuranceData.curInsurance = $scope.insuranceData.quotes[insuranceIdx] ;
         $log.debug("SaveInsurance new curInsurance : "+JSON.stringify($scope.insuranceData.curInsurance)) ;

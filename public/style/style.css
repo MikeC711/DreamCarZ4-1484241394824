@@ -59,7 +59,9 @@ body                            { padding-top:20px; }
 .tHi:hover {
     cursor: pointer;
     background-color: #009933 !important; }
-
+.panel-heading:hover {
+  background-color: #009933 !important;
+}
 /* ANIMATIONS
 ============================================================================= */
 /* slide out to the left */
@@ -86,4 +88,66 @@ body                            { padding-top:20px; }
     from    { -webkit-transform:translateX(200%); }
     to      { -webkit-transform: translateX(0); }
 }
+/*
+Breadcrumbs
+*/
 
+.col-md-2, .col-md-10{
+    padding:0;
+}
+.panel{
+    margin-bottom: 0px;
+}
+.breadcrumb-window{
+    bottom:0;
+    right: 0 !important;
+    position:fixed;
+    float:right;
+    margin-left:10px;
+}
+.breadcrumb-window > div > .panel{
+    border-radius: 5px 5px 0 0;
+}
+.icon_minim{
+    padding:2px 5px;
+}
+.msg_container_base{
+  background: #e5e5e5;
+  margin: 0;
+  padding: 0 10px 10px;
+  max-height:350px;
+  overflow-x:hidden;
+}
+.top-bar {
+  background: #666;
+  color: white;
+  padding: 10px;
+  position: relative;
+  overflow: hidden;
+}
+
+.msg_container {
+    padding: 10px;
+    overflow: hidden;
+    display: flex;
+}
+
+.table-striped>tbody>tr:nth-child(odd)>td, .table-striped>tbody>tr:nth-child(odd)>th {
+background-color: #696969;
+}
+
+#form-views > div > div > div.table-responsive > table > tbody > tr:nth-child(even){
+    background-color:#484747;
+}
+
+.table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
+  background-color: #00bc8c;
+}
+
+th{
+    text-align:center;
+    font-style:bold;
+}
+td{
+    text-align:center;
+}

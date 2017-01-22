@@ -1,12 +1,12 @@
 <!-- form-getInsurance.html -->
-<div class="container">
+<div class="col-xs-12">
 <h2>And Finally, let's make sure this dream has protection</h2>
   <md-content style="margin: 16px; padding:16px">
     <h3> Insurance Sliders </h3>
     <div layout>
       <div flex="10" layout layout-align="center center"> <span class="md-body-1">Deductible</span> </div>
-      <md-slider flex md-discrete min="500" max="5000" round="0" ng-model="insuranceData.deductible"
-           ng-change="echoSliderDeductible()" aria-label="red" step="250" id="insuranceDeductibleSlider" class> </md-slider>
+      <md-slider flex md-discrete min="500" max="5000" area-valuenow="500" round="2" ng-model="insuranceData.deductible"
+           ng-change="echoSliderDeductible()" aria-label="red" step="250" id="insuranceDeductibleSlider"> </md-slider>
         <div flex="20" layout layout-align="center center"> <input type="number" ng-model="insuranceData.deductible" aria-label="red" ng-change="echoSliderDeductible()"
            aria-controls="insuranceDeductibleSlider"> </div>
       </div>
@@ -24,9 +24,20 @@
 <div class="row">
   <form name="insuranceForm">
     <h3>Choose from our premier Insurerers</h3>
-      <div class="row" ng-repeat="quote in insuranceData.quotes">
-        <a ui-sref="form.reviewProcess" class="btn btn-block btn-info tHi" ng-click="saveInsurance($index)">{{quote.company}}   {{quote.payment}} p.a.<span class="glyphicon glyphicon-circle-arrow-right pull-right" style="padding-right:5px;padding-top:2px;"></span>
-      </div>
+     <div class="table-responsive">
+  <table class="table table-striped table-hover table-bordered">
+    <thead>
+      <tr>
+        <th>Company</th>
+        <th>Cost (p.a)</th>
+      </tr>
+    </thead>
+      <tr ng-repeat="quote in insuranceData.quotes" ui-sref="form.reviewProcess" ng-click="saveInsurance($index)" style="cursor: pointer;">
+        <td>{{quote.company}}</td>
+        <td>${{quote.payment}} <span class="glyphicon glyphicon-circle-arrow-right pull-right" style="padding-right:5px;padding-top:2px;"></span></td>
+      </tr>
+  </table>
+</div>
   </form>
 </div>
 </div>

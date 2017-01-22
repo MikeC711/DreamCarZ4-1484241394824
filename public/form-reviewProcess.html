@@ -1,24 +1,36 @@
 <!-- form-reviewProcess.html -->
-<h2>Last few details between you and the dream</h2>
-This is a dummy screen waiting to become real
 <!-- form-loginScreen.html -->
 <div class="row">
     <div class="col-xs-12"> <h2>You're all ready to get behind the wheel</h2> </div>
 </div>
 <div class="row">
-    <div class="col-xs-6 col-xs-offset-3"> <h3>We've contacted DMV and the car will be registered to you on the day it arrives!!</h3> </div>
-    <div class="col-xs-6 col-xs-offset-3"> <h3>This screen will soon be augmented with Blockchain so these key players can get you driving even sooner</h3> </div>
-    <div class="col-xs-6 col-xs-offset-4"> <h4>Dealer: {{carData.curDealer.name}}</h4> </div>
-    <div class="col-xs-6 col-xs-offset-4"> <h4>Lender: {{loanData.curLoan.company}}</h4> </div>
-    <div class="col-xs-6 col-xs-offset-4"> <h4>Insurer: {{insuranceData.curInsurance.company}}</h4> </div>
-    <div class="col-xs-6 col-xs-offset-4"> <h4>Registration with DMV</h4> </div>
-    <div class="col-xs-6 col-xs-offset-4"> <h4></h4> </div>
-    <div class="col-xs-6 col-xs-offset-4"> <h4>{{carData.curDealer.name}} will deliver this dream to your home on (figure out some date) </h4> </div>
+    <div class="col-xs-12"> <h3>We've contacted DMV and the car will be registered to you on the day it arrives!!</h3> 
+       <div class="table-responsive">
+  <table class="table table-striped table-hover table-bordered">
+    <thead>
+      <tr>
+        <th>Dealer</th>
+        <th>Lender</th>
+        <th>Insurer</th>
+      </tr>
+    </thead>
+      <tr ng-repeat="quote in insuranceData.quotes" ui-sref="form.reviewProcess" ng-click="saveInsurance($index)" style="cursor: pointer;">
+        <td>{{carData.curDealer.name}}</td>
+        <td>${{loanData.curLoan.company}}</td>
+        <td>{{insuranceData.curInsurance.company}}</td>
+      </tr>
+  </table>
 </div>
-<div class="col-xs-6 col-xs-offset-3">
+
+<h3>This screen will soon be augmented with Blockchain so these key players can get you driving even sooner</h3> 
+    
+   <h4>Registration with DMV</h4>
+  
+    <h4>{{carData.curDealer.name}} will deliver this dream to your home on (figure out some date) </h4>
+
     <a ui-sref="form.congratsScreen" class="btn btn-block btn-info">
     BUY <span class="glyphicon glyphicon-circle-arrow-right"></span>
     </a>
-</div>
-</div>
 
+</div>
+</div>

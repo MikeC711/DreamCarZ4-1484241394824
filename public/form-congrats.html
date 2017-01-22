@@ -1,4 +1,10 @@
 <!-- form-insurance.html -->
+<div class="col-xs-8">
 <h2>Congratulations !!!</h2>
-We need to get the image in the background, fill in the gift, etc ... no action needed from this screen<br>
-Will show gift of:  {{carData.gift}}
+<h4>Your free gift of: {{carData.gift}}, is on its way to you</h4>
+</div>
+<div class="col-xs-4">
+      <img class="img-responsive" src="{{carData.curCar.url}}" alt="{{carData.curCar.model}}">
+      <div class="caption">
+        <p>{{carData.curCar.model}} ${{carData.curCar.price}}</p>
+      </div>
