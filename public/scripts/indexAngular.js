@@ -200,7 +200,7 @@ $scope.time = '...';
                         $scope.bcEls.spark.actionArr.push($scope.breadCrumbCount+" Retrieved Spark Data: debt2Asset : "+fsresult.customer.d2aratio+" , debt2Income: "+
                             fsresult.customer.d2iratio+" , carLoanBal : "+fsresult.customer.clcurbl+" If debt2Income < 10 ... then automobile offer makes sense" ) ;
                                                             // This is crucial test to see if they are eligible for offer based on financial status
-                        if ($scope.financeData.customer.d2iratio < 10)   return ;
+                        if ($scope.financeData.customer.d2iratio > 10)   return ;
                         $scope.financeOK = true ;
                         if ($scope.geoOK) $scope.carRecommendations() ;       // If finance and geoLocation OK, call for recommendation
 

@@ -109,7 +109,7 @@ app.get(REST_DCDATA + '/userInfo', function(request, response) {    // This hand
     response.write(JSON.stringify({statusCode : 200, userMessage : "", userInfo : userInfo})) ;
     response.end() ;
 }) ;
-
+ 
 /*********************************************************************************************************************************
  Retrieve info from Spark to see if this customer should receive any special offers
 *********************************************************************************************************************************/

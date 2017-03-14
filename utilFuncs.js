@@ -9,9 +9,7 @@ http.globalAgent.maxSockets = 60 ;
 https.globalAgent.maxSockets = 60 ;
 
 var cloudant, dcDealerInventory, dcDealers, dcModels, dcModelOptions ;       // Needed for Cloudant
-var bankHost = "cap-sg-prd-3.integration.ibmcloud.com", bankPort = "17968", bankDir = "sgBank" ;
-var bankOptions = { host : bankHost, port : bankPort, method : 'GET',
-    key: fs.readFileSync('keys/'+bankDir+'/pmwzhhmN2QI_Hqk_key.pem'), cert: fs.readFileSync('keys/'+bankDir+'/pmwzhhmN2QI_Hqk_cert.pem') } ;
+var bankOptions = {}, sparkCallback, bankBasePath ;
  
 var REST_DCDATA = '/api/dreamCarZ', bankTrace = false, insuranceTrace = false, watsonTrace = false, carTrace = false ;
 var dayLabel = [ "", "1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th", "10th", "11th", "12th", "13th", "14th", "15th", "16th", "17th", "18th", "19th", "20th",
@@ -61,14 +59,13 @@ var dbCredentials = {   // Only needed for Cloudant case
 var watsonInfo = { dfltHost : "gateway.watsonplatform.net", dfltPath : "/personality-insights/api/v2/profile",
     dfltUid : "096226c5-9360-4aa6-85ee-ec57e708175d", dfltPw : "HbBMst8gWV6M" } ;
 
-var sparkInfo = { dfltHost : "cap-sg-prd-3.integration.ibmcloud.com", dfltPort : "16520", dfltPath : "/DreamCarZSparkInterface/dreamcars/customer/" } ;
-var sparkOptions = { host : sparkInfo.dfltHost, port : sparkInfo.dfltPort, method : 'GET' } ;
+var sparkOptions = { } ;
 var sparkAPIcOptions = { host : "api.us.apiconnect.ibmcloud.com", method : 'GET',
     pathPref : "/mcasileusibmcom-dev/main-api-catalog/DreamCarZSparkInterface/dreamcars/customer/",
 //    headers : { 'x-ibm-client-id': '6d922d4d-a8de-4dc3-a9fb-96c5fcd06eda' } } ;
     headers : {accept: 'application/json', 'content-type': 'application/json', 'x-ibm-client-id': '6d922d4d-a8de-4dc3-a9fb-96c5fcd06eda' } } ;
 
-var envInfo = {}, useAPIC ;
+var envInfo = {}, useAPIC = false, bankSparkPath ;
 
 /*********************************************************************************************************************************
  Cloudant connection setup
@@ -93,6 +90,21 @@ initDBConnection = function () {
             watsonInfo.dfltPw = wpiCredentials.password ;
         }
     }
+    envInfo.bankingHost = process.env.bankingHost || "cap-sg-prd-5.integration.ibmcloud.com" ;
+    envInfo.bankingPort = process.env.bankingPort || "16953" ;
+    bankBasePath = process.env.bankingPath || "/dreamcarzdemo2/" ;
+//    envInfo.bankingDir  = process.env.bankingDir  || "sgBank" ;
+    envInfo.bankingCertFile = process.env.bankingCertFile || "keys/sgBank/q3XKbfNZep8_e7J_destCert.pem" ;
+    envInfo.bankingKeyFile = process.env.bankingKeyFile || "keys/sgBank/q3XKbfNZep8_e7J_destKey.pem" ;
+    envInfo.bankSparkHost = process.env.bankSparkHost || "cap-sg-prd-5.integration.ibmcloud.com" ;
+    envInfo.bankSparkPort = process.env.bankSparkPort || "16173" ;
+    envInfo.bankSparkPath = process.env.bankSparkPath || "/DreamCarZSparkInterface/dreamcars/customer/" ;
+    bankSparkPath = envInfo.bankSparkPath ;
+    bankOptions = { host : envInfo.bankingHost, port : envInfo.bankingPort, method : 'GET',
+        key: fs.readFileSync(envInfo.bankingKeyFile), cert: fs.readFileSync(envInfo.bankingCertFile) } ;
+    generalLog("UF: bankOptions host: %s  bankOptions port: %d  certFileNm: %s  keyFileName: %s", bankOptions.host, bankOptions.port, envInfo.bankingCertFile, envInfo.bankingKeyFile) ;
+    sparkOptions = { host : envInfo.bankSparkHost, port : envInfo.bankSparkPort, method : 'GET' } ;
+    generalLog("UF: sparkOptions %s", JSON.stringify(sparkOptions)) ;
     var traceStr = process.env.NODE_DEBUG ;
     console.log(traceStr);
     bankTrace = (traceStr.indexOf("bank") >= 0) ;
@@ -149,7 +161,6 @@ applySelection = function(userSelect, propNm, pct) {
         }
     }
 }
-
 
 /*********************************************************************************************************************************
  Parse thru list of children for this item to apply rules and categorizations
@@ -385,87 +396,55 @@ filterModels = function(bodyStyle, safetyLevel, minPrice, maxPrice, colors, call
  Function to handle results is defined separately since called under http for straight to REST and https for APIConnect
                                                                             // Now we know about car type, get price range
 *********************************************************************************************************************************/
-handleSparkData = function(sres) {
+var handleSparkData = function(sres) {
     var srsltStr = '', dfltResponse = {}, successFlag = true ;
     if (sres.statusCode >= 400) {
-        generalLog("UF:getWatsRec from WPI/Spark Got bad return code: %d  Msg: %s", sres.statusCode, sres.statusMessage);
+        successFlag = false ;
+        generalLog("UF:handleSparkData got bad return code: %d  Msg: %s", sres.statusCode, sres.statusMessage);
         dfltResponse = { status : sres.statusCode, statusText : sres.statusMessage } ; 
     }
-    if (watsonTrace) bankLog("UF:getWatsRec getWPI/Spark recommendation got response in reqGet:status: %d  msg: %s", sres.statusCode, sres.statusMessage); 
+    if (bankTrace) bankLog("UF:handleSparkData got response in reqGet:status: %d  msg: %s", sres.statusCode, sres.statusMessage); 
     sres.setEncoding('utf8');
     sres.on('data', function(d2) {
         if (successFlag) srsltStr += d2 ;
         else dfltResponse.statusText += d2 ;
     });
     sres.on('end', function() {
-        var jsonData2 = (successFlag) ? JSON.parse(srsltStr) : null ;
-        // TODO: priceFactor has to go back into recommendation ... but I need to look back at JSON and send indicator of yeah or neah.
-        // TODO: Also send JSON back to customer so they can see it in explain
-        // TODO: And don't forget to create loans table and this extra table on zos21cld
-        var priceFactor = 40 - Number(jsonData2.customer.d2iratio) ;
-        var minSelect = 15000 + (500 * priceFactor) ;
-        var maxSelect = 30000 + (1000 * priceFactor) ;
-        if (bankTrace) bankLog("UF:getWatsRec Spark data for id: %s priceFactor: %d minSelect: %d  maxSelect: %d  is: %s",
-            jsonData2.customer_id, priceFactor, minSelect, maxSelect, JSON.stringify(jsonData2)) ;
-        filterCars(userSelect[0].selectFactors.id, minSelect, maxSelect, null, null, geoLatitude, geoLongitude, null, null, null, numLimit, function(ferr, fdata) {
-            if (ferr) {
-                generalLog("UF:getWatsRec Error in queryInventory: %s", JSON.stringify(ferr)) ;
-                callback(ferr, null) ;
-            } else {
-                watsonLog("UF:getWatsRec Number of rows from filterCars: %d", fdata.length) ;
-                fdata[0].selectFactors = userSelect[0].selectFactors.propList ;
-                fdata[0].debt2Income = jsonData2.customer.d2iratio ;
-                fdata[0].gift = userSelect[0].selectFactors.gift ;
-                    // TODO: userSelect[0] and other factors can be added additionally here.
-                callback(null, fdata) ;
-            }
-        }) ;
+        if (successFlag) {
+            var jsonData2 = JSON.parse(srsltStr) ;
+            if (bankTrace) bankLog("UF:handleSparkData Spark data: %s", JSON.stringify(jsonData2)) ;
+            sparkCallback(null, jsonData2) ;
+        } else sparkCallback(dfltResponse, null) ;
     })
-}
+} ;
 
 /*********************************************************************************************************************************
  Service to use API Connect and retrieve information stored in Spark
 *********************************************************************************************************************************/
 getFinancialSummary = function(uid, callback) {
-    // TODO: Caller now should pass in sufficient data (maybe just d2iratio?) since this call done earlier now
     var sparkOpts, reqGet ;
-    sparkOpts = sparkAPIcOptions ;
-    sparkOpts.path = sparkAPIcOptions.pathPref+uid ;
-    if (bankTrace) bankLog("UF:getFinSumm Spark APIC: options preCall: %s", JSON.stringify(sparkOpts)) ;
-    var srsltStr = '', dfltResponse = {}, successFlag = true ;
-    reqGet = https.request(sparkOpts, function(sres) {
-        if (sres.statusCode >= 400) {
-            successFlag = false ;
-            generalLog("UF:getWatsRec from WPI/Spark Got bad return code: %d  Msg: %s", sres.statusCode, sres.statusMessage);
-            dfltResponse = { status : sres.statusCode, statusText : sres.statusMessage } ; 
-        }
-        if (bankTrace) bankLog("UF:getFinancialSummary got response in reqGet:status: %d  msg: %s", sres.statusCode, sres.statusMessage); 
-        sres.setEncoding('utf8');
-        sres.on('data', function(d2) {
-            if (successFlag) srsltStr += d2 ;
-            else dfltResponse.statusText += d2 ;
+    sparkCallback = callback ;              // Allow common code (handleSparkData) to drive callback (no longer threadSafe?)
+    if (useAPIC) {
+        sparkOpts = sparkAPIcOptions ;
+        sparkOpts.path = sparkAPIcOptions.pathPref+uid ;
+        if (bankTrace) bankLog("UF:getFinSumm Spark APIC: options preCall: %s", JSON.stringify(sparkOpts)) ;
+        var srsltStr = '', dfltResponse = {}, successFlag = true ;
+        reqGet = https.request(sparkOpts, handleSparkData) ;
+        reqGet.on('error', function(e3) {
+            callback(e3, null) ;
         });
-        sres.on('end', function() {
-            if (successFlag) {
-                var jsonData2 = JSON.parse(srsltStr) ;
-                if (bankTrace) bankLog("UF:getFinancialSummary Spark data: %s", JSON.stringify(jsonData2)) ;
-                callback(null, jsonData2) ;
-            } else callback(dfltResponse, null) ;
-        })
-    }) ;
-    reqGet.on('error', function(e3) {
-        callback(e3, null) ;
-    });
-    reqGet.end() ;
-}
-
-/*    } else {      // This is the non-APIConnect method of calling which is not needed anymore
+        reqGet.end() ;
+    } else {            // Non API Connect
         sparkOpts = sparkOptions ;
-        sparkOpts.path = sparkInfo.dfltPath+smData._id ;        // TODO: For APIC, use https NOT http
-        if (bankTrace) bankLog("UF:getWatsRec Spark http: options preCall: %s", JSON.stringify(sparkOpts)) ;
-        // TODO: Figure out if/how to set up callback here
+        sparkOpts.path = bankSparkPath+uid ;
+        if (bankTrace) bankLog("UF:getFinancialSummary Spark http: options preCall: %s", JSON.stringify(sparkOpts)) ;
         reqGet = http.request(sparkOpts, handleSparkData) ;
-    } */
+        reqGet.on('error', function(e3) {
+            callback(e3, null) ;
+        });
+        reqGet.end() ;
+    }
+} ;
 
  
 /*********************************************************************************************************************************
@@ -791,7 +770,7 @@ getUserInfo = function(userName, uid) {
 getAccountData = function(uid, callback) {        // Must have run /user first to stash uid cookie
     var getAccountOpts = bankOptions ;
 
-    getAccountOpts.path = '/nimbusbankV2/accounts/'+uid ;
+    getAccountOpts.path = bankBasePath+'accounts/'+uid ;
     bankLog("UF: getAcctData Host: %s  port:  %s  method: %s  Path: %s", getAccountOpts.host, getAccountOpts.port, getAccountOpts.method, getAccountOpts.path) ;
     var successFlag = true ;
     var dfltResponse = { status : 200, statusText : "OK" } ;
@@ -833,7 +812,7 @@ getAccountData = function(uid, callback) {        // Must have run /user first t
 getLoanData = function(uid, callback) {        // Must have run /user first to stash uid cookie
     var getLoanOpts = bankOptions ;
 
-    getLoanOpts.path = '/nimbusbankV2/loan/'+uid ;
+    getLoanOpts.path = bankBasePath+'loans/'+uid ;
     generalLog("UF:getLoan Host: %s  port:  %s  method: %s  Path: %s", getLoanOpts.host, getLoanOpts.port, getLoanOpts.method, getLoanOpts.path) ;
     var successFlag = true ;
     var dfltResponse = { status : 200, statusText : "OK" } ;
