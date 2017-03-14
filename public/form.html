@@ -1,4 +1,4 @@
-<div class="container">
+    <div class="container">
 <!-- form.html -->
 <div class="row">
 
@@ -7,9 +7,23 @@
     <div id="form-container">
 
         <div class="page-header text-center">
-            <div class="col-xs-9"> <h2>Mortage Application Form</h2> </div>
+            <div class="col-xs-9"> <h2>DreamCarZ .. Make it Yours</h2> </div>
             <div class="col-xs-3"> <img src="jpg/NimbusLogo.jpg"  class="img-thumbnail" width="153" height="117" alt="Nimbus Logo"> </div>
-             
+            
+            <!-- the links to our nested states using relative paths -->
+            <!-- add the active class if the state matches our ui-sref -->
+           <!--  <div id="status-buttons" class="text-center">
+                <a ui-sref-active="active" ui-sref=".loginScreen"><span>1</span> Nimbus Bank Login</a>
+                <a ui-sref-active="active" ui-sref=".nextBestAction"><span>2</span> Next Best Action</a>
+                <a ui-sref-active="active" ui-sref=".carsAndFilters"><span>3</span> Select your perfect car</a>
+                <a ui-sref-active="active" ui-sref=".testDrive"><span>4</span> Schedule a Test Drive</a>
+                <a ui-sref-active="active" ui-sref=".getLoan"><span>5</span> Choose your lender</a>
+                <a ui-sref-active="active" ui-sref=".getInsurance"><span>6</span> Insure this dream car</a>
+                <a ui-sref-active="active" ui-sref=".processReview"><span>7</span> Tie up the process</a>
+                <a ui-sref-active="active" ui-sref=".congratsScreen"><span>8</span> Congratulations</a>
+            </div> -->
+            <!-- TODO: Collapse whole thing, format display of actions a bit -->
+              
         </div>
        
         <!-- use ng-submit to catch the form submission and use our Angular function -->
@@ -25,4 +39,71 @@
   </div>
 </div>
 </div>
+
+
+
+
+
+
+<div class="container">
+    <div class="row breadcrumb-window col-xs-6 col-md-4" id="breadcrumb" style="margin-left:10px;">
+        <div class="col-xs-12 col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading top-bar " style="background-color:#1a56a2;">
+                    <div class="col-md-8 col-xs-8">
+                        <h3 class="panel-title"><span class="glyphicon glyphicon-question-sign"></span> How this works</h3>
+                    </div>
+                    <div class="col-md-4 col-xs-4" style="text-align: right;">
+                     <span id="minim_breadcrumb_window" class="glyphicon glyphicon-plus icon_minim panel-collapsed" style="cursor: pointer"></span>
+                       
+                    </div>
+                </div>
+
+<div class="panel-body panel-collapsed collapse msg_container_base" style="padding-top:10px;"> 
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+  
+  <div class="panel panel-default" ng-repeat="component in breadCrumbs">
+    <div class="panel-heading" style="background-color:#1a56a2;" role="tab" id="heading{{breadCrumbs.length - $index - 1}}">
+      <h4 class="panel-title" >
+        <a href="javascript:;" class="btn-block" role="button" data-toggle="collapse" data-parent="heading{{breadCrumbs.length - $index - 1}}" data-target="#collapse{{breadCrumbs.length - $index - 1}}" aria-expanded="false" aria-controls="collapse{{breadCrumbs.length - $index - 1}}">
+          {{component.descrip}} <span class="badge" style="background-color: #2383C4; float:right;">{{component.count}}</span>
+        </a>
+      </h4>
+    </div>
+    <div id="collapse{{breadCrumbs.length - $index - 1}}" class="panel-collapse collapse panel-collapsed" role="tabpanel" aria-labelledby="heading{{breadCrumbs.length - $index - 1}}" style="padding-top:5px;">
+      <div class="list-group" ng-repeat="gAction in component.actionArr.slice().reverse()">
+       {{gAction}}
+       <hr ng-If="breadCrumbs.length > $index" />
+      </div>
+    </div>
+  </div>
+
+
+</div>
+</div>
+          </div>
+                </div>
+              
+        </div>
+        </div>
  
+
+
+<script>
+$(document).on('click', '.panel-heading span.icon_minim', function (e) {
+    var $this = $(this);
+
+    if (!$this.hasClass('panel-collapsed')) {
+        $this.parents('.panel').find('.panel-body').slideUp();
+        $this.addClass('panel-collapsed');
+        $this.removeClass('glyphicon-minus').addClass('glyphicon-plus');
+    } else {
+        $this.parents('.panel').find('.panel-body').slideDown();
+         $('.panel-collapse.in').collapse('hide');
+        $this.removeClass('panel-collapsed');
+        $this.removeClass('glyphicon-plus').addClass('glyphicon-minus');
+    }
+});
+</script>
+
+
