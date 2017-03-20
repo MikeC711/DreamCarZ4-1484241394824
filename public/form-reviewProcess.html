@@ -14,9 +14,9 @@
         <th>Insurer</th>
       </tr>
     </thead>
-      <tr ng-repeat="quote in insuranceData.quotes" ui-sref="form.reviewProcess" ng-click="saveInsurance($index)" style="cursor: pointer;">
+      <tr ui-sref="form.reviewProcess" style="cursor: pointer;">
         <td>{{carData.curDealer.name}}</td>
-        <td>${{loanData.curLoan.company}}</td>
+        <td>{{loanData.curLoan.company}}</td>
         <td>{{insuranceData.curInsurance.company}}</td>
       </tr>
   </table>
