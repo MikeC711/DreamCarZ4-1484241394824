@@ -197,6 +197,9 @@ myCities = [
  { State : "New Zealand", City : "Auckland", geoLatitude : -36.85, geoLongitude : 174.76 },
  { State : "Belgium", City : "Brussels", geoLatitude : 50.85, geoLongitude : 4.35 },
  { State : "France", City : "Paris", geoLatitude : 48.86, geoLongitude : 2.35 },
+ { State : "Japan", City : "Tokyo", geoLatitude : 35.689, geoLongitude : 139.692 },
+ { State : "Japan", City : "Osaka", geoLatitude : 34.686, geoLongitude : 135.52 },
+ { State : "Japan", City : "Sapporo", geoLatitude : 43.06, geoLongitude : 141.35 },
  { State : "Germany", City : "Berlin", geoLatitude : 52.52, geoLongitude : 13.41 } ] ;
 
 brands = [
